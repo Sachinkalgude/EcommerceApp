@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+  Profile
+{% endblock %}
+{% block content %}
+  <div class="container p-5">
+    <div class="row d-flex justify-content-center align-item-center text-center p-5">
+      <div class="col p-5 mt-5">
+        {% if request.user.is_authenticated %}
+          <h1>Profile Info.</h1>
+          {{ form.first_name }}
+          {{ form.last_name }}
+          {{ form.email }}
+          {{ form.adress }}
+          <a href="{% url 'logout' %}"><input type="button" class="btn btn-danger mt-1" value="logout" /></a>
+        {% else %}
+          <p>login first</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

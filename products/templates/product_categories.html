@@ -1,0 +1,16 @@
+<div class="row d-flex justify-content-center align-item-center gap-4">
+  {% for i in item %}
+    <div class="container card col-md-4 m-2 p-0 border border-0" style="width: 18rem;">
+      <img src="{{ i.image.url }}" class="card-img-top" alt="t-shirt image" style="width: 100%;" />
+      <div class="card-body">
+        <h5 class="card-title">{{ i.name }}</h5>
+        <p class="card-text">{{ i.discription }}</p>
+        <p>
+          <strong>{{ i.product_price }} <span>Rs.</span></strong>
+        </p>
+        <a href="{% url 'add_cart' uuid=i.uuid %}" class="btn text-light border border-0" style="background-color: rgb(60, 7, 83);" type="submit">Add To Cart</a>
+        <a href="{% url 'get_product_view' uuid=i.uuid %}" class="btn text-light" style="background-color: rgb(60, 7, 83);">See Product</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>

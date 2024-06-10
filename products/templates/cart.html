@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  cart
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col d-flex justify-content-around align-item-center">
+      <div class="p-5 d-flex flex-column justify-content-center align-item-center gap-4">
+        {% if cart %}
+          {% for item in cart %}
+            <div class="card mb-3 border border-0" style="max-width: 540px;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img src="{{ item.product.image.url }}" class="img-fluid rounded-start" alt="..." />
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text">{{ item.product.discription }}</p>
+                    <p class="card-text">
+                      <strong>{{ item.product.product_price }} <span>Rs.</span></strong>
+                    </p>
+                    <div class="d-flex gap-4">
+                      <p>Total Quantity : {{ item.quantity }}</p>
+                      <p>Total Price: Rs{{ item.total_cost }}</p>
+                    </div>
+                    <a href="" class="btn btn-sm text-light" type="submit" style="background-color: rgb(60, 7, 83);">Remove</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h1>No Item avilable in Cart.</h1>
+        {% endif %}
+      </div>
+      <div class="p-5">
+        <div>
+          <h5>PRICE DETAILS</h5>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between align-item-center">
+          <p>Price</p>
+          <p>{{ total_price }}</p>
+        </div>
+        <div class="d-flex justify-content-between align-item-center">
+          <p>shipping</p>
+          <p>+{{ shiping }}</p>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between align-item-center">
+          <p>Amount</p>
+          <p>{{ amount }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
