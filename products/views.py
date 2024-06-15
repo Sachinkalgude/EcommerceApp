@@ -1,12 +1,33 @@
 from django.shortcuts import render,redirect
 from .models import *
+from django.core.cache import cache
 # Create your views here.
 
 
 def all_products(request):
-    item = Product.objects.all()
-    categories = Categories.objects.all()
-    return render(request,'index.html',context={"item":item,"categories":categories})
+    # Dynamically generate cache keys based on model names
+    product_cache_key = 'Product_all'
+    categories_cache_key = 'Categories_all'
+
+    # Try to get products and categories from cache
+    item = cache.get(product_cache_key)
+    categories = cache.get(categories_cache_key)
+    # print("coming from cache")
+
+    # If products or categories are not in cache, fetch from database and set cache
+    if item is None:
+        item = list(Product.objects.all())  # Convert queryset to list for caching
+        cache.set(product_cache_key, item, timeout=300)  # Cache for 5 minutes
+        # print('coming from db')
+        
+    
+    if categories is None:
+        categories = list(Categories.objects.all())  # Convert queryset to list for caching
+        cache.set(categories_cache_key, categories, timeout=300)  # Cache for 5 minutes
+
+    # Render the template with the context
+    return render(request, 'index.html', context={"item": item, "categories": categories})
+
 
 def get_categories_response(request,uuid):
     category = Categories.objects.get(uuid=uuid)
