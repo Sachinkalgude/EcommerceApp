@@ -42,6 +42,8 @@ def add_cart(request,uuid):
             cart_items.quantity += 1
             cart_items.save()
         return redirect('view_cart')
+    else:
+        return redirect('login')
 
 def remove_item_cart(request):
     return render(request,'cart.html')
