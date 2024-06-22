@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import sys
 from pathlib import Path
 from decouple import config
 
@@ -21,10 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2as_1$mou-ej#)2pnk91fqq6$cp8+4dpkvs32ce_y6d7qcb@5-'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ["*"]
 
@@ -49,7 +47,7 @@ INSTALLED_APPS = [
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/1',
+        'LOCATION': config('REDIS_URL'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -89,24 +87,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Ecommerce',
-        'USER': 'postgres',
-        'PASSWORD': 'Sachin@6355',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 
@@ -158,3 +146,22 @@ MEDIA_ROOT = BASE_DIR/'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATETIME_FORMAT="%Y-%m-%d%H:%M:%S"
+
+
+
+if not SECRET_KEY:
+    print("The SECRET_KEY setting must not be empty.", file=sys.stderr)
+if DEBUG is None:
+    print("The DEBUG setting must not be None.", file=sys.stderr)
+if not DATABASES['default']['ENGINE']:
+    print("The DB_ENGINE setting must not be empty.", file=sys.stderr)
+if not DATABASES['default']['NAME']:
+    print("The DB_NAME setting must not be empty.", file=sys.stderr)
+if not DATABASES['default']['USER']:
+    print("The DB_USER setting must not be empty.", file=sys.stderr)
+if not DATABASES['default']['PASSWORD']:
+    print("The DB_PASSWORD setting must not be empty.", file=sys.stderr)
+if not DATABASES['default']['HOST']:
+    print("The DB_HOST setting must not be empty.", file=sys.stderr)
+if not DATABASES['default']['PORT']:
+    print("The DB_PORT setting must not be empty.", file=sys.stderr)
